@@ -1,6 +1,7 @@
 # Paint Expert 
 
-Paint Expert is a full-featured image editor that is based on Seashore(https://github.com/robaho/seashore). Paint Expert is aslo an easy to use but powerful graphics image painting app that offers you the most needed and useful tools in the toolbox panel.
+Paint Expert is a full-featured image editor that is based on Seashore(https://github.com/robaho/seashore). Paint Expert is aslo an easy to use but powerful graphics image painting app that offers you the most needed and useful tools in the toolbox panel. Paint Expert is open source, and free to download, use and distribute.
+
 
 All documentation and source code of Paint Expert are now migrated to GitHub
 
@@ -16,3 +17,12 @@ Instructions for building Paint Expert
 2. Open the project file by Xcode.
 3. Click Build button or press short-key: `Command + B`
 
+
+# Thanks
+
+Many thanks to the developers and/or frameworks:
+1. Mark Pazolli
+2. Stephen Siciliano
+3. Robert Engels
+4. GNU Image Manipulation Program(GIMP) framework
+5. PocketSVG framework
