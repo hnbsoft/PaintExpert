@@ -1,6 +1,8 @@
 #import "Globals.h"
 #import "SeaDocument.h"
 
+@class MyToolboxDataManager;
+
 /*!
 	@class		ToolboxUtility
 	@abstract	Allows the user to select a range of tools for image
@@ -11,7 +13,7 @@
 				<b>Copyright:</b> Copyright (c) 2002 Mark Pazolli
 */
 
-@interface ToolboxUtility : NSObject <NSToolbarDelegate> {
+@interface ToolboxUtility : NSObject {
 
 	// The document which is the focus of this utility
 	__weak IBOutlet SeaDocument *document;
@@ -38,7 +40,9 @@
 	int oldTool;
 
 	// The toolbar
-	NSToolbar *toolbar;
+	// NSToolbar *toolbar; // Charley removed
+    MyToolboxDataManager *_toolboxDataManager;
+    IBOutlet NSCollectionView *myToolboxCollectionView;
 
 	IBOutlet id selectionTBView;
 	IBOutlet id drawTBView;
@@ -218,4 +222,7 @@
 */
 - (BOOL)validateMenuItem:(id)menuItem;
 
+@end
+
+@interface MyToolboxCollectionScroller : NSScroller
 @end

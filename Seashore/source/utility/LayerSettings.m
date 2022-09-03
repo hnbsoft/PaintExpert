@@ -13,7 +13,9 @@
 - (void)awakeFromNib
 {
 	settingsLayer = nil;
-	[(InfoPanel *)panel setPanelStyle:kHorizontalPanelStyle];	
+	[(InfoPanel *)panel setPanelStyle:kFloatingPanelStyle];
+    [(InfoPanel *)panel setStyleMask:(NSWindowStyleMaskTitled)];
+    ((InfoPanel *)panel).title = @"Layer Settings";
 }
 
 - (void)activate
@@ -111,6 +113,14 @@
 	[panel orderFrontToGoal:point onWindow: [document window]];
 	
 	settingsLayer = layer;
+    
+    // Charley added, Center layer settings on main window.
+    NSRect mainWinFrame = [[document window] frame];
+    NSRect layerWinFrame = [panel frame];
+    CGFloat layerPosX = NSMinX(mainWinFrame) + (NSWidth(mainWinFrame) - NSWidth(layerWinFrame)) * 0.5;
+    CGFloat layerPosY = NSMinY(mainWinFrame) + (NSHeight(mainWinFrame) - NSHeight(layerWinFrame)) * 0.5;
+    [panel setFrameOrigin:NSMakePoint(layerPosX, layerPosY)];
+    
 	[NSApp runModalForWindow:panel];
 }
 

@@ -17,6 +17,7 @@
 #import "CropTool.h"
 #import "PositionOptions.h"
 #import "SeaPrefs.h"
+#import "HNBPaint-Swift.h"
 
 @implementation SeaCursors
 
@@ -26,26 +27,26 @@
 	view = newView;
 	/* Set-up the cursors */
 	// Tool Specific Cursors
-	crosspointCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"crosspoint-cursor"] hotSpot:NSMakePoint(7, 7)];
-	wandCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"wand-cursor"] hotSpot:NSMakePoint(8, 8)];
-	zoomCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"zoom-cursor"] hotSpot:NSMakePoint(9, 9)];
-	pencilCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"pencil-cursor"] hotSpot:NSMakePoint(2, 2)];
-	brushCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"brush-cursor"] hotSpot:NSMakePoint(2, 2)];
-    cloneCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"clone-cursor"] hotSpot:NSMakePoint(12, 4)];
-	bucketCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"bucket-cursor"] hotSpot:NSMakePoint(3, 17)];
-	eyedropCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"eyedrop-cursor"] hotSpot:NSMakePoint(2, 2)];
-	moveCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"move-cursor"] hotSpot:NSMakePoint(11, 11)];
+	crosspointCursor =[NSCursor createCursorWithImageName:@"CRCrossPointTemplate" hotSpot:NSMakePoint(7, 7)];
+	wandCursor = [NSCursor createCursorWithImageName:@"CRWandTemplate" hotSpot:NSMakePoint(8, 8)];
+    zoomCursor = [NSCursor createCursorWithImageName:@"CRZoomTemplate" hotSpot:NSMakePoint(9, 9)];
+    pencilCursor = [NSCursor createCursorWithImageName:@"CRPencilTemplate" hotSpot:NSCursor.kHotSpotPointBottomLeft];
+    brushCursor = [NSCursor createCursorWithImageName:@"CRBrushTemplate" hotSpot:NSCursor.kHotSpotPointBottomLeft]; // old (2, 2)
+    cloneCursor = [NSCursor createCursorWithImageName:@"CRCloneTemplate" hotSpot:NSMakePoint(22, 14)];
+    bucketCursor = [NSCursor createCursorWithImageName:@"CRBucketTemplate" hotSpot:NSMakePoint(22, 14)];
+    eyedropCursor = [NSCursor createCursorWithImageName:@"CREyedropTemplate" hotSpot:NSMakePoint(1, 22)];
+	moveCursor = [NSCursor createCursorWithImageName:@"CRMoveTemplate" hotSpot:NSMakePoint(3, 2)];
 
-	eraserCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"eraser-cursor"] hotSpot:NSMakePoint(7, 7)];
-	smudgeCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"smudge-cursor"] hotSpot:NSMakePoint(12, 1)];
-	effectCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"effect-cursor"] hotSpot:NSMakePoint(3, 3)];
+    eraserCursor = [NSCursor createCursorWithImageName:@"CREraserTemplate" hotSpot:NSCursor.kHotSpotPointBottomLeft];
+    smudgeCursor = [NSCursor createCursorWithImageName:@"CRSmudgeTemplate" hotSpot:NSCursor.kHotSpotPointBottomLeft];
+	effectCursor = [NSCursor createCursorWithImageName:@"CREffectsTemplate" hotSpot:NSMakePoint(1, 1)];
     noopCursor = [NSCursor operationNotAllowedCursor];
 	
 	// Additional Cursors
 	addCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"crosspoint-add-cursor"] hotSpot:NSMakePoint(7, 7)];
 	subtractCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"crosspoint-subtract-cursor"] hotSpot:NSMakePoint(7, 7)];
 	closeCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"crosspoint-close-cursor"] hotSpot:NSMakePoint(7, 7)];
-	resizeCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"resize-cursor"] hotSpot:NSMakePoint(12, 12)];
+	resizeCursor = [[NSCursor alloc] initWithImage:[NSImage imageNamed:@"CRResizeTemplate"] hotSpot:NSMakePoint(12, 12)];
 	
 	// View Generic Cursors
 	handCursor = [NSCursor openHandCursor];

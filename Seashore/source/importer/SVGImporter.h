@@ -19,7 +19,7 @@
 	IBOutlet id spinner;
 
 	// The scaling panel
-	IBOutlet id scalePanel;
+	IBOutlet NSWindow * scalePanel;
 	
 	// The slider indicating the extent of scaling
 	IBOutlet id scaleSlider;

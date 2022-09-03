@@ -38,7 +38,7 @@ enum {
 	IBOutlet id controller;
 	
 	// The preferences panel
-	IBOutlet id panel;
+	IBOutlet NSWindow * panel;
 	
 	// The general prefs view
 	IBOutlet id generalPrefsView;

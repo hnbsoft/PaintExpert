@@ -484,8 +484,11 @@ static int count=0;
 	
 	// Add in our exporters
 	[exportersPopUp removeAllItems];
-	for (i = 0; i < [exporters count]; i++)
-		[exportersPopUp addItemWithTitle:[[exporters objectAtIndex:i] title]];
+    for (i = 0; i < [exporters count]; i++) {
+        NSString *fileType = [[exporters objectAtIndex:i] title];
+        NSString *displayName = [SeaDocumentController.sharedDocumentController displayNameForType:fileType];
+        [exportersPopUp addItemWithTitle: displayName];
+    }
 	[exportersPopUp selectItemAtIndex:exporterIndex];
 	[savePanel setRequiredFileType:[[exporters objectAtIndex:exporterIndex] extension]];
 	
@@ -583,6 +586,19 @@ static int count=0;
 	
 	// Get the old frame so we can preserve the top-left origin
 	frame = [docWindow frame];
+    
+    // Charley added. Set the old frame to the center of screen.
+    NSScreen *screen = [docWindow screen];
+    if (screen && [screen isKindOfClass:[NSScreen class]])
+    {
+        NSRect visibleFrame = [screen visibleFrame];
+        CGFloat centerPosX = visibleFrame.origin.x + (NSWidth(visibleFrame) - NSWidth(frame)) * 0.5;
+        CGFloat centerPosY = visibleFrame.origin.y + (NSHeight(visibleFrame) - NSHeight(frame)) * 0.5;
+        frame.origin.x = centerPosX;
+        frame.origin.y = centerPosY;
+    }
+    
+    
 	float minHeight = 480;
 
 	// Store the initial conditions of the window 
@@ -626,6 +642,11 @@ static int count=0;
 	// Reset the origin's y-value to keep the titlebar level
 	rect.origin.y = rect.origin.y - rect.size.height + frame.size.height;
 	
+    // Check the minSize of window-frame
+    NSSize windowMinSize = [docWindow minSize];
+    if (rect.size.width < windowMinSize.width) { rect.size.width = windowMinSize.width; }
+    if (rect.size.height < windowMinSize.height) { rect.size.height = windowMinSize.height; }
+    
 	return rect;
 }
 

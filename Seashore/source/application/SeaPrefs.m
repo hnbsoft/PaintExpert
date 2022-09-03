@@ -273,6 +273,7 @@ CGDisplayErr GetMainDisplayDPI(float *horizontalDPI, float *verticalDPI)
     [panel setToolbar: toolbar];
 	[toolbar setSelectedItemIdentifier:GeneralPrefsIdentifier];
 	[(NSPanel *)panel setContentView: generalPrefsView];
+    [(NSPanel *)panel setContentSize:NSMakeSize(532, 279)];
 
 	// Register to recieve the terminate message when Seashore quits
 	[controller registerForTermination:self];

@@ -152,6 +152,22 @@
     
     [lastView setFrameOrigin:NSMakePoint(0,(bounds.size.height-vbounds.size.height)/2)];
     
+    // Charley: Hide help button on optionsBar view
+    if (lastView && [lastView isKindOfClass:[NSView class]])
+    {
+        for (NSButton *btn in [((NSView *)(lastView)) subviews])
+        {
+            if (btn && [btn isKindOfClass:[NSButton class]])
+            {
+                if (NSBezelStyleHelpButton == btn.bezelStyle)
+                {
+                    btn.hidden = YES;
+                    break;
+                }
+            }
+        }
+    }
+    
     // Update the options
     [currentOptions activate:document];
     [currentOptions update];

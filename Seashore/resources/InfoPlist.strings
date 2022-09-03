@@ -1,0 +1,23 @@
+/* 
+  InfoPlist.strings
+  Seashore
+
+  Created by My Apps on 2019/8/28.
+  
+*/
+
+
+/* Document type display name */
+"GIMP image" = "GIMP Image (*.XCF)";
+"Windows bitmap image" = "BMP (*.BMP)";
+"QuickDraw picture" = "QuickDraw Picture (*.PCT, *.PICT)";
+"Portable Document Format (PDF)" = "PDF (*.PDF)";
+"JPEG image" = "JPEG (*.JPG, *.JPEG)";
+"X11 bitmap" = "X11 Bitmap (*.XBM)";
+"TIFF image" = "TIFF (*.TIF, *.TIFF)";
+"Portable Network Graphics image" = "PNG (*.PNG)";
+"JPEG 2000 image" = "JPEG 2000 (*.JP2)";
+"Graphics Interchange Format (GIF)" = "GIF (*.GIF)";
+"SVG document" = "SVG (*.SVG)";
+"HEIC image" = "HEIC (*.HEIC)";
+

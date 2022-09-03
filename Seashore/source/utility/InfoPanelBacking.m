@@ -13,7 +13,15 @@
 		top = YES;
 	}else if(panelStyle == kHorizontalPanelStyle){
 		side = YES;
-	}
+    }
+    else if (panelStyle == kFloatingPanelStyle)
+    {
+        // Charley added.
+        [super drawRect:r];
+        [[NSColor windowBackgroundColor] set];
+        NSRectFill(r);
+        return;
+    }
 	
     [[NSColor windowBackgroundColor] set];
 

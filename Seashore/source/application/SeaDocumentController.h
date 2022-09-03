@@ -9,13 +9,13 @@
 				<b>Copyright:</b> Copyright (c) 2006 Mark Pazolli
 */
 
-@interface SeaDocumentController : NSDocumentController {
+@interface SeaDocumentController : NSDocumentController <NSTableViewDataSource, NSTableViewDelegate> {
 
 	// An outlet to the preferences manager of the application
 	IBOutlet id seaPrefs;
 	
 	// A panel through which a new image can be configured
-	IBOutlet id newPanel; 
+	IBOutlet NSWindow * newPanel; 
 	
 	// The various text boxes from the New Image Settings panel
 	IBOutlet id widthInput, heightInput;
@@ -32,12 +32,19 @@
 	// The units menu for the New Image Settings panel
 	IBOutlet id unitsMenu;
 	
+    // My unitsMenuHeight, Charley added.
+    IBOutlet id unitsMenuHeight;
+    
 	// The templates menu from the New Image Settings panel
 	IBOutlet id templatesMenu;	
 	
 	// The transparency checkbox for the New Image settings panel
 	IBOutlet id backgroundCheckbox;
 	
+    IBOutlet NSPopUpButton *backgroundContentsMenu; // Charley added
+    
+    IBOutlet NSTableView *recentTableView; // Charley added.
+    
 	// The dropdown for the recent documents.
 	IBOutlet id recentMenu;
 	
@@ -67,6 +74,9 @@
 	@result		Returns instance upon success (or NULL otherwise).
 */
 - (id)init;
+
+// Charley added
+- (IBAction)hideNewPanel:(id)sender;
 
 /*!
 	@method		newDocument:

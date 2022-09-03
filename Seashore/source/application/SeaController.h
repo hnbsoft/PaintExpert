@@ -55,6 +55,11 @@
 - (id)init;
 
 /*!
+    @method applicationWillFinishLaunching
+ */
+- (void)applicationWillFinishLaunching:(NSNotification *)notification;
+
+/*!
 	@method		applicationDidFinishLaunching:
 	@discussion	Called when the application finishes launching.
 	@param		notification
@@ -189,5 +194,8 @@
 	@result		YES if the menu item should be enabled, NO otherwise.
 */
 - (BOOL)validateMenuItem:(id)menuItem;
+
+/// Show about panel.
+- (IBAction)executeShowAboutPanel:(id)sender;
 
 @end

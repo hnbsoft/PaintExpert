@@ -28,7 +28,7 @@
 	BOOL targetWeb;
 
 	// The panel allowing compression options to be set
-	IBOutlet id panel;
+	IBOutlet NSWindow * panel;
 	
 	// The compressed preview
 	IBOutlet id compressImageView;

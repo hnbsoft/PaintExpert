@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="153" height="171"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button horizontalHuggingPriority="100" verticalHuggingPriority="100" horizontalCompressionResistancePriority="100" verticalCompressionResistancePriority="100" translatesAutoresizingMaskIntoConstraints="NO" id="5tD-5F-qUG" customClass="MyToolItemButton" customModule="HNBPaint" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="153" height="171"/>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSInvalidDataFreestandingTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" inset="2" id="Jmo-nR-Vp7">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="toolItemButtonDidClick:" target="uqt-JV-HXy" id="sBZ-iz-T9O"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="5tD-5F-qUG" secondAttribute="trailing" id="BXs-gx-1JW"/>
+                <constraint firstAttribute="bottom" secondItem="5tD-5F-qUG" secondAttribute="bottom" id="Fiz-cO-sKo"/>
+                <constraint firstItem="5tD-5F-qUG" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="IfK-sP-uVY"/>
+                <constraint firstItem="5tD-5F-qUG" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="ydh-GT-tyM"/>
+            </constraints>
+            <point key="canvasLocation" x="-122.5" y="48.5"/>
+        </customView>
+        <collectionViewItem id="uqt-JV-HXy" customClass="MyToolboxCollectionViewItem" customModule="HNBPaint" customModuleProvider="target">
+            <connections>
+                <outlet property="toolItemButton" destination="5tD-5F-qUG" id="cja-eT-Q6K"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="pi2-lK-gHa"/>
+            </connections>
+        </collectionViewItem>
+    </objects>
+    <resources>
+        <image name="NSInvalidDataFreestandingTemplate" width="14" height="14"/>
+    </resources>
+</document>

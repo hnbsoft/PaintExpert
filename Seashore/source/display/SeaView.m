@@ -808,13 +808,18 @@ static CGFloat white[4] = {0,3.5,2,.5};
         // Draw source point
         if ([cloneTool sourceSetting]) {
             sourcePoint = [cloneTool sourcePoint:NO];
-            crossImage = [NSImage imageNamed:@"cross"];
+            crossImage = [NSImage imageNamed:@"MCCrossTemplate"];
             outPoint = IntPointMakeNSPoint(sourcePoint);
             outPoint.x *= xScale;
             outPoint.y *= yScale;
             outPoint.x -= 12;
             outPoint.y -= 10;
             outPoint.y += 26;
+            
+            // Charley added
+            outPoint.x += 0.5;
+            outPoint.y -= 3.5;
+            
             [crossImage compositeToPoint:outPoint operation:NSCompositeSourceOver fraction:(float)[cloneTool sourceSetting] / 100.0];
         }
     }else if (curToolIndex == kEffectTool){
@@ -1011,9 +1016,9 @@ static CGFloat white[4] = {0,3.5,2,.5};
     
     // Turn mouse coalescing on or off
     if ([curTool useMouseCoalescing] || [(SeaPrefs *)[SeaController seaPrefs] mouseCoalescing] || scrollingMode){
-        SetMouseCoalescingEnabled(true, NULL);
+        [NSEvent setMouseCoalescingEnabled: YES]; // SetMouseCoalescingEnabled(true, NULL);
     }else{
-        SetMouseCoalescingEnabled(false, NULL);
+        [NSEvent setMouseCoalescingEnabled: NO];  // SetMouseCoalescingEnabled(false, NULL);
     }
     
     if (tabletEraser < 2) {
@@ -1215,7 +1220,7 @@ static CGFloat white[4] = {0,3.5,2,.5};
     yScale = [[document contents] yscale];
     
     // Return to normal coalescing
-    SetMouseCoalescingEnabled(true, NULL);
+    [NSEvent setMouseCoalescingEnabled: YES]; // SetMouseCoalescingEnabled(true, NULL);
     
     // Check if we are in scrolling mode
     if (scrollingMode) {

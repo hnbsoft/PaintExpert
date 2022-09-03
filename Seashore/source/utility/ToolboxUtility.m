@@ -18,6 +18,9 @@
 #import "SeaWindowContent.h"
 #import "WarningsUtility.h"
 #import "AbstractTool.h"
+#import "HNBPaint-Swift.h"
+
+@import NBCore;
 
 static NSString*	DocToolbarIdentifier 	= @"Document Toolbar Instance Identifier";
 
@@ -28,6 +31,19 @@ static NSString*    TransformIdentifier = @"Transform Item Identifier";
 static NSString*	ColorsIdentifier = @"Colors Item Identifier";
 
 static NSString*    SelectionEditIdentifier = @"Selection Edit Identifier";
+
+/// The identifier of collection view item.
+#define kMyToolboxCollectionViewItemId          @"MyToolboxCollectionViewItem"
+
+/// The identifier of collection footer view.
+#define kMyToolboxCollectionFooterViewId        @"MyToolboxCollectionFooterView"
+
+/// The height of the footer view, (width is automatically equal to width of collection view)
+#define kMyToolboxCollectionFooterViewHeight    30
+
+// protocol
+@interface ToolboxUtility() <NSCollectionViewDataSource, MyToolboxCollectionViewItemDelegate>
+@end
 
 @implementation ToolboxUtility
 
@@ -65,14 +81,45 @@ static NSString*    SelectionEditIdentifier = @"Selection Edit Identifier";
 					 [NSNumber numberWithInt: kPositionTool],
                       nil];
 	
-	
+    _toolboxDataManager = [[MyToolboxDataManager alloc] init];
 	return self;
 }
 
 - (void)awakeFromNib
 {
-
-	// Create the toolbar instance, and attach it to our document window 
+    [super awakeFromNib];
+    
+    // Register the Collection nib.
+    NSNib *itemNib = [[NSNib alloc] initWithNibNamed:@"MyToolboxCollectionViewItem" bundle:nil];
+    if (itemNib != nil) {
+        [myToolboxCollectionView registerNib:itemNib forItemWithIdentifier:kMyToolboxCollectionViewItemId];
+    }
+    
+    // Register the footer nib
+    NSNib *footerNib = [[NSNib alloc] initWithNibNamed:@"MyToolboxCollectionFooterView" bundle:nil];
+    if (footerNib != nil)
+    {
+        [myToolboxCollectionView registerNib:footerNib
+                  forSupplementaryViewOfKind:NSCollectionElementKindSectionFooter
+                              withIdentifier:kMyToolboxCollectionFooterViewId];
+    }
+    
+    NSCollectionViewFlowLayout *layout = myToolboxCollectionView.collectionViewLayout;
+    if (JBS_IS_INSTANCE_VALID(layout, NSCollectionViewFlowLayout)) {
+        layout.footerReferenceSize = NSMakeSize(1, kMyToolboxCollectionFooterViewHeight); // Only height is "Used", (width is ignored)
+    }
+    
+    // View Layout Object settings, Currenlty used "flow layout"
+    // NSCollectionViewGridLayout *layout = myToolboxCollectionView.collectionViewLayout;
+    // if (JBS_IS_INSTANCE_VALID(layout, NSCollectionViewGridLayout)) {
+    //     layout.minimumInteritemSpacing = 5;
+    //     layout.minimumLineSpacing = 4;
+    //     layout.margins = NSEdgeInsetsMake(8, 5, 8, 0); // top, left, bottom, right
+    // }
+    
+	// Create the toolbar instance, and attach it to our document window
+    // Charley removed
+    /*
     toolbar = [[NSToolbar alloc] initWithIdentifier: DocToolbarIdentifier];
     
     // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
@@ -85,10 +132,13 @@ static NSString*    SelectionEditIdentifier = @"Selection Edit Identifier";
 	
     // Attach the toolbar to the document window 
     [[document window] setToolbar: toolbar];
+    */
 	
 	[[SeaController utilitiesManager] setToolboxUtility: self for:document];
 }
 
+// Charley removed
+/*
 - (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted
 {
     
@@ -164,6 +214,7 @@ static NSString*    SelectionEditIdentifier = @"Selection Edit Identifier";
 			NSToolbarSeparatorItemIdentifier,
 			nil];
 }
+*/
 
 - (NSColor *)foreground
 {
@@ -305,6 +356,9 @@ static NSString*    SelectionEditIdentifier = @"Selection Edit Identifier";
 		[self update:YES];
 	}
 	if (updateCrop) [[[SeaController utilitiesManager] infoUtilityFor:document] update];
+    
+    // Update toolbox
+    [myToolboxCollectionView reloadData];
 }
 
 -(void)floatTool
@@ -341,4 +395,90 @@ static NSString*    SelectionEditIdentifier = @"Selection Edit Identifier";
 	
 	return YES;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// MARK: - NSCollectionViewDataSource Methods
+//
+- (NSInteger)numberOfSectionsInCollectionView:(NSCollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return [_toolboxDataManager findNumberOfToolItems];
+}
+
+- (NSCollectionViewItem *)collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSCollectionViewItem *item = [collectionView makeItemWithIdentifier:kMyToolboxCollectionViewItemId forIndexPath:indexPath];
+    NSInteger itemIndex = indexPath.item;
+    
+    // Change to my sub collection-view-item
+    MyToolboxCollectionViewItem *myItem = (MyToolboxCollectionViewItem *)item;
+    if (JBS_IS_INSTANCE_VALID(myItem, MyToolboxCollectionViewItem))
+    {
+        // Work with myItem
+        NSNumber *toolTagNumber = [_toolboxDataManager findToolTagForIndex:itemIndex];
+        if (JBS_IS_INSTANCE_VALID(toolTagNumber, NSNumber)) {
+            [myItem configUIWithToolTag:[toolTagNumber integerValue] selected:([toolTagNumber integerValue] == tool)];
+            myItem.delegate = self;
+        }
+        else {
+            JBSDebug_e(@"Cannot find tool tag for indexPath:%@", indexPath);
+        }
+    }
+    else {
+        JBSDebug_e(@"Cannot find my customized CollectionViewItem");
+    }
+    
+    // At last return
+    return myItem;
+}
+
+// MARK: - MyToolboxCollectionViewItemDelegate Methods
+- (void)toolboxCollectionViewItemExecuteActionWithToolItemButton:(MyToolItemButton *)toolItemButton
+{
+    [self selectToolUsingTag:toolItemButton];
+}
+
+// MARK: - Collection footer view methods
+- (NSView *)collectionView:(NSCollectionView *)collectionView viewForSupplementaryElementOfKind:(NSCollectionViewSupplementaryElementKind)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if ([kind isEqualToString:NSCollectionElementKindSectionFooter])
+    {
+        NSView *view = [collectionView makeSupplementaryViewOfKind:NSCollectionElementKindSectionFooter
+                                                    withIdentifier:kMyToolboxCollectionFooterViewId
+                                                      forIndexPath:indexPath];
+        MyToolboxCollectionFooterView *footerView = (MyToolboxCollectionFooterView *)view;
+        if (JBS_IS_INSTANCE_VALID(footerView, MyToolboxCollectionFooterView) && JBS_IS_INSTANCE_VALID(colorSelectView, NSView))
+        {
+            // Config this footer view.
+            [footerView configUIWithColorView:colorSelectView];
+        }
+        
+        // Return view.
+        return footerView;
+    }
+    
+    // Error
+    JBSDebug_e(@"Error Supplementary View");
+    return [[NSView alloc] initWithFrame:NSZeroRect];
+}
+
+@end
+
+
+@implementation MyToolboxCollectionScroller
+
++ (CGFloat)scrollerWidthForControlSize:(NSControlSize)controlSize scrollerStyle:(NSScrollerStyle)scrollerStyle {
+    return 0;
+}
+
+- (void)drawKnobSlotInRect:(NSRect)slotRect highlight:(BOOL)flag {
+}
+
+- (void)drawKnob {
+}
+
 @end

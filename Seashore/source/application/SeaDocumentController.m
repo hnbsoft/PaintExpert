@@ -46,6 +46,12 @@
 	}
 }
 
+// Charley added
+- (IBAction)hideNewPanel:(id)sender
+{
+    [newPanel orderOut:self];
+}
+
 - (IBAction)newDocument:(id)sender
 {		
 	NSString *string;
@@ -62,6 +68,7 @@
 	// Display the panel for configuring
 	units = [(SeaPrefs *)[SeaController seaPrefs] newUnits];
 	[unitsMenu selectItemAtIndex: units];
+    [unitsMenuHeight selectItemAtIndex: units]; // Charley added
 	[resMenu selectItemAtIndex:[(SeaPrefs *)[SeaController seaPrefs] resolution]];
 	[modeMenu selectItemAtIndex:[(SeaPrefs *)[SeaController seaPrefs] mode]];
 	resolution = [[resMenu selectedItem] tag];
@@ -71,7 +78,18 @@
 	[heightUnits setStringValue:UnitsString(units)];
 	[backgroundCheckbox setState:[(SeaPrefs *)[SeaController seaPrefs] transparentBackground]];
 	
+    // Charley added
+    BOOL transBg = [(SeaPrefs *)[SeaController seaPrefs] transparentBackground];
+    if (transBg) {
+        [backgroundContentsMenu selectItemAtIndex:1];
+    }
+    else {
+        [backgroundContentsMenu selectItemAtIndex:0];
+    }
+    
 	// Set up the recents menu
+    [recentTableView reloadData];
+    
 	int i;
 	NSArray *recentDocs = [super recentDocumentURLs];
 	if([recentDocs count]){
@@ -157,6 +175,9 @@
 	type = [modeMenu indexOfSelectedItem];
 	opaque = ![backgroundCheckbox state];
 
+    // Charley added
+    opaque = (backgroundContentsMenu.indexOfSelectedItem == 0) ? YES : NO;
+    
 	// Create a new document
 	[super newDocument:sender];
 }
@@ -178,6 +199,7 @@
 			size = [(SeaPrefs *)[SeaController seaPrefs] size];
 			units = [(SeaPrefs *)[SeaController seaPrefs] newUnits];
 			[unitsMenu selectItemAtIndex: units];
+            [unitsMenuHeight selectItemAtIndex: units]; // Charley added
 			res = [(SeaPrefs *)[SeaController seaPrefs] resolution];
 			[resMenu selectItemAtIndex:res];
 		break;
@@ -198,6 +220,7 @@
 			size = NSSizeMakeIntSize([[NSScreen mainScreen] frame].size);
 			units = kPixelUnits;
 			[unitsMenu selectItemAtIndex: kPixelUnits];
+            [unitsMenuHeight selectItemAtIndex: kPixelUnits]; // Charley added
 		break;
 		case 4:
 			paperSize = [[NSPrintInfo sharedPrintInfo] paperSize];
@@ -206,6 +229,7 @@
 			size = NSSizeMakeIntSize(paperSize);
 			units = kInchUnits;
 			[unitsMenu selectItemAtIndex: kInchUnits];
+            [unitsMenuHeight selectItemAtIndex: kInchUnits];// Charley added
 			size.width = (float)size.width * (res / 72.0);
 			size.height = (float)size.height * (res / 72.0);
 		break;
@@ -233,6 +257,16 @@
 	size.width =  PixelsFromFloat([widthInput floatValue],units,res);
 
 	units = [[unitsMenu selectedItem] tag];
+    // Charley added.
+    if (unitsMenuHeight == sender) {
+        units = [[unitsMenuHeight selectedItem] tag];
+        [unitsMenu selectItemAtIndex: units];
+    }
+    else if (unitsMenu == sender) {
+        [unitsMenuHeight selectItemAtIndex: units];
+    }
+    // ---
+    
 	[widthInput setStringValue:StringFromPixels(size.width, units, res)];
 	[heightInput setStringValue:StringFromPixels(size.height, units, res)];
 	[heightUnits setStringValue:UnitsString(units)];
@@ -327,6 +361,63 @@
 		}
 	}
 	return NO;
+}
+
+// Recent table view data source and delegate
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+    NSArray *recentDocs = [super recentDocumentURLs];
+    return [recentDocs count];
+}
+
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    NSTableCellView *cv = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
+    if ([cv isKindOfClass:[NSTableCellView class]])
+    {
+        NSArray *recentDocs = [super recentDocumentURLs];
+        NSInteger i = row;
+        if (recentDocs && i >= 0 && i < [recentDocs count])
+        {
+            NSString *path = [[recentDocs objectAtIndex:i] path];
+            NSString *filename = [path lastPathComponent];
+            NSImage *image = [[NSImage alloc] initWithContentsOfFile:path]; // [[NSWorkspace sharedWorkspace] iconForFile: path];
+           
+            cv.imageView.image = image;
+            cv.textField.stringValue = filename;
+            
+            // tooltips
+            cv.imageView.toolTip = path;
+            cv.textField.toolTip = path;
+            cv.toolTip = path;
+        }
+    }
+    
+    // return
+    return cv;
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)notification
+{
+    NSTableView *tableView = (NSTableView *)(notification.object);
+    if ([tableView isKindOfClass:[NSTableView class]])
+    {
+        NSInteger i = tableView.selectedRow;
+        NSArray *recentDocs = [super recentDocumentURLs];
+        
+        if (recentDocs && i >= 0 && i < [recentDocs count])
+        {
+            // Get the selected path.
+            NSString *path = [[recentDocs objectAtIndex:i] path];
+            
+            // Deselect all
+            [tableView performSelector:@selector(deselectAll:) withObject:self afterDelay:0.1];
+            
+            // Open it.
+            [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:path display:YES];
+        }
+        
+    }
 }
 
 @end

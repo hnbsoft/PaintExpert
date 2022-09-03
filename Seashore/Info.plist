@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string></string>
+	<string>Paint Expert</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -66,7 +66,7 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>pic</string>
+				<string>pct</string>
 				<string>pict</string>
 				<string>PCT</string>
 				<string>PICT</string>
@@ -349,6 +349,8 @@
 				<string>heic</string>
 				<string>HEIC</string>
 			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>HEIC Icon.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>image/heic</string>
@@ -377,40 +379,27 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>Seashore</string>
+	<string>Paint Expert</string>
+	<key>CFBundleIconFile</key>
+	<string>appicon</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Seashore</string>
+	<string>Paint Expert</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.4.10</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>SeSh</string>
 	<key>CFBundleVersion</key>
-	<string>2019082101</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.graphics-design</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>$(MACOSX_DEPLOYMENT_TARGET).0</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>seashore.sourceforge.net</key>
-			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSTemporaryExceptionMinimumTLSVersion</key>
-				<string>TLSv1.1</string>
-			</dict>
-		</dict>
-	</dict>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright (c) 1995-2019 Mark Pazolli et al.
 GNU General Public License v2.0</string>
