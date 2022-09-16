@@ -26,3 +26,8 @@ Many thanks to the developers and/or frameworks:
 3. Robert Engels
 4. GNU Image Manipulation Program(GIMP) framework
 5. PocketSVG framework
+
+
+# License
+
+Paint Expert is released under an GNU General Public License v2.0 license. See the [LICENSE](LICENSE) file for more information.
