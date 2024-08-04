@@ -3,7 +3,7 @@
 Paint Expert is a full-featured image editor that is based on Seashore(https://github.com/robaho/seashore). Paint Expert is aslo an easy to use but powerful graphics image painting app that offers you the most needed and useful tools in the toolbox panel. Paint Expert is open source, and free to download, use and distribute.
 
 
-All documentation and source code of Paint Expert are now migrated to GitHub
+All documentation and source code of Paint Expert can be downloaded from this [link](https://paint-x.com/opensource/zips/PaintExpert.zip).
 
 
 # Build Paint Expert
